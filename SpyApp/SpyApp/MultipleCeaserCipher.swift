@@ -5,7 +5,7 @@ protocol fourthCipher {
     func decode(_ plaintext: String, secret: String) -> String
 }
 
-//doules the amount of secret shifts
+//doubles the amount of secret shifts
 struct MultipleCeaserCipher: fourthCipher {
     func encode(_ plaintext: String, secret: String) -> String {
         var encoded = ""

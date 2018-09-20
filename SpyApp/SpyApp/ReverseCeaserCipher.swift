@@ -5,7 +5,7 @@ protocol thirdCipher {
     func decode(_ plaintext: String, secret: String) -> String
 }
 
-//shift the charaters by secret then reverse the string
+//shift the charaters by secret then reverse print the string
 struct ReverseCeaserCipher: thirdCipher {
     func encode(_ plaintext: String, secret: String) -> String {
         var encoded = ""

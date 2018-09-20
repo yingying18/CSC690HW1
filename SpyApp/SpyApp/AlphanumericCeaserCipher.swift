@@ -30,6 +30,23 @@ struct AlphanumericCeaserCipher: otherCipher {
             }
         }
         
+        if encoded.range(of: "{") != nil {
+            encoded = encoded.replacingOccurrences(of: "{", with: "0")
+        } else if encoded.range(of: "[") != nil {
+            encoded = encoded.replacingOccurrences(of: "[", with: "0")
+        }
+        if encoded.range(of: ":") != nil {
+            encoded = encoded.replacingOccurrences(of: ":", with: "a")
+        }
+        if encoded.range(of: "'") != nil {
+            encoded = encoded.replacingOccurrences(of: "'", with: "9")
+        } else if encoded.range(of: "@") != nil {
+            encoded = encoded.replacingOccurrences(of: "@", with: "9")
+        }
+        if encoded.range(of: "/") != nil {
+            encoded = encoded.replacingOccurrences(of: "/", with: "z")
+        }
+        
         return encoded.uppercased()
     }
     
@@ -55,6 +72,23 @@ struct AlphanumericCeaserCipher: otherCipher {
                 let shiftedCharacter = String(UnicodeScalar(UInt8(shiftedUnicode)))
                 decoded = decoded + shiftedCharacter
             }
+        }
+        
+        if decoded.range(of: "{") != nil {
+            decoded = decoded.replacingOccurrences(of: "{", with: "0")
+        } else if decoded.range(of: "[") != nil {
+            decoded = decoded.replacingOccurrences(of: "[", with: "0")
+        }
+        if decoded.range(of: ":") != nil {
+            decoded = decoded.replacingOccurrences(of: ":", with: "a")
+        }
+        if decoded.range(of: "'") != nil {
+            decoded = decoded.replacingOccurrences(of: "'", with: "9")
+        } else if decoded.range(of: "@") != nil {
+            decoded = decoded.replacingOccurrences(of: "@", with: "9")
+        }
+        if decoded.range(of: "/") != nil {
+            decoded = decoded.replacingOccurrences(of: "/", with: "z")
         }
         
         return decoded.uppercased()

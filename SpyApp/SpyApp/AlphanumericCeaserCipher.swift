@@ -16,7 +16,28 @@ struct AlphanumericCeaserCipher: otherCipher {
             shiftBy = UInt32(newSecret)!
             for character in plaintext {
                 let unicode = character.unicodeScalars.first!.value
-                let shiftedUnicode = unicode - shiftBy
+                var tempUnicode = unicode
+                if unicode > 96 && unicode < 123 {
+                    tempUnicode = unicode - 32
+                }
+                if tempUnicode-shiftBy < 65 || tempUnicode-shiftBy < 48 {
+                    var oneShift = shiftBy
+                    while oneShift > 0 {
+                        if tempUnicode-1 < 48 {
+                            tempUnicode += 42
+                            oneShift -= 1
+                        } else if tempUnicode-1 < 65 && tempUnicode > 57 {
+                            tempUnicode -= 8
+                            oneShift -= 1
+                        } else {
+                            tempUnicode -= 1
+                            oneShift -= 1
+                        }
+                    }
+                }else {
+                    tempUnicode -= shiftBy
+                }
+                let shiftedUnicode = tempUnicode
                 let shiftedCharacter = String(UnicodeScalar(UInt8(shiftedUnicode)))
                 encoded = encoded + shiftedCharacter
             }
@@ -24,30 +45,34 @@ struct AlphanumericCeaserCipher: otherCipher {
             shiftBy = UInt32(secret)!
             for character in plaintext {
                 let unicode = character.unicodeScalars.first!.value
-                let shiftedUnicode = unicode + shiftBy
+                var tempUnicode = unicode
+                if unicode > 96 && unicode < 123 {
+                    tempUnicode = unicode - 32
+                }
+                if tempUnicode+shiftBy > 90 || tempUnicode+shiftBy > 57 {
+                    var oneShift = shiftBy
+                    while oneShift > 0 {
+                        if tempUnicode+1 > 57 && tempUnicode+1 < 65 {
+                            tempUnicode += 8
+                            oneShift -= 1
+                        } else if tempUnicode+1 > 90 {
+                            tempUnicode -= 42
+                            oneShift -= 1
+                        } else {
+                            tempUnicode += 1
+                            oneShift -= 1
+                        }
+                    }
+                }else {
+                    tempUnicode += shiftBy
+                }
+                let shiftedUnicode = tempUnicode
                 let shiftedCharacter = String(UnicodeScalar(UInt8(shiftedUnicode)))
                 encoded = encoded + shiftedCharacter
             }
         }
         
-        if encoded.range(of: "{") != nil {
-            encoded = encoded.replacingOccurrences(of: "{", with: "0")
-        } else if encoded.range(of: "[") != nil {
-            encoded = encoded.replacingOccurrences(of: "[", with: "0")
-        }
-        if encoded.range(of: ":") != nil {
-            encoded = encoded.replacingOccurrences(of: ":", with: "a")
-        }
-        if encoded.range(of: "'") != nil {
-            encoded = encoded.replacingOccurrences(of: "'", with: "9")
-        } else if encoded.range(of: "@") != nil {
-            encoded = encoded.replacingOccurrences(of: "@", with: "9")
-        }
-        if encoded.range(of: "/") != nil {
-            encoded = encoded.replacingOccurrences(of: "/", with: "z")
-        }
-        
-        return encoded.uppercased()
+        return encoded
     }
     
     func decode(_ plaintext: String, secret: String) -> String {
@@ -60,7 +85,28 @@ struct AlphanumericCeaserCipher: otherCipher {
             shiftBy = UInt32(newSecret)!
             for character in plaintext {
                 let unicode = character.unicodeScalars.first!.value
-                let shiftedUnicode = unicode + shiftBy
+                var tempUnicode = unicode
+                if unicode > 96 && unicode < 123 {
+                    tempUnicode = unicode - 32
+                }
+                if tempUnicode+shiftBy > 90 || tempUnicode+shiftBy > 57 {
+                    var oneShift = shiftBy
+                    while oneShift > 0 {
+                        if tempUnicode+1 > 57 && tempUnicode+1 < 65 {
+                            tempUnicode += 8
+                            oneShift -= 1
+                        } else if tempUnicode+1 > 90 {
+                            tempUnicode -= 42
+                            oneShift -= 1
+                        } else {
+                            tempUnicode += 1
+                            oneShift -= 1
+                        }
+                    }
+                }else {
+                    tempUnicode += shiftBy
+                }
+                let shiftedUnicode = tempUnicode
                 let shiftedCharacter = String(UnicodeScalar(UInt8(shiftedUnicode)))
                 decoded = decoded + shiftedCharacter
             }
@@ -68,29 +114,33 @@ struct AlphanumericCeaserCipher: otherCipher {
             shiftBy = UInt32(secret)!
             for character in plaintext {
                 let unicode = character.unicodeScalars.first!.value
-                let shiftedUnicode = unicode - shiftBy
+                var tempUnicode = unicode
+                if unicode > 96 && unicode < 123 {
+                    tempUnicode = unicode - 32
+                }
+                if tempUnicode-shiftBy < 65 || tempUnicode-shiftBy < 48 {
+                    var oneShift = shiftBy
+                    while oneShift > 0 {
+                        if tempUnicode-1 < 48 {
+                            tempUnicode += 42
+                            oneShift -= 1
+                        } else if tempUnicode-1 < 65 && tempUnicode > 57 {
+                            tempUnicode -= 8
+                            oneShift -= 1
+                        } else {
+                            tempUnicode -= 1
+                            oneShift -= 1
+                        }
+                    }
+                }else {
+                    tempUnicode -= shiftBy
+                }
+                let shiftedUnicode = tempUnicode
                 let shiftedCharacter = String(UnicodeScalar(UInt8(shiftedUnicode)))
                 decoded = decoded + shiftedCharacter
             }
         }
         
-        if decoded.range(of: "{") != nil {
-            decoded = decoded.replacingOccurrences(of: "{", with: "0")
-        } else if decoded.range(of: "[") != nil {
-            decoded = decoded.replacingOccurrences(of: "[", with: "0")
-        }
-        if decoded.range(of: ":") != nil {
-            decoded = decoded.replacingOccurrences(of: ":", with: "a")
-        }
-        if decoded.range(of: "'") != nil {
-            decoded = decoded.replacingOccurrences(of: "'", with: "9")
-        } else if decoded.range(of: "@") != nil {
-            decoded = decoded.replacingOccurrences(of: "@", with: "9")
-        }
-        if decoded.range(of: "/") != nil {
-            decoded = decoded.replacingOccurrences(of: "/", with: "z")
-        }
-        
-        return decoded.uppercased()
+        return decoded
     }
 }
